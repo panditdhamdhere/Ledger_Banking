@@ -8,5 +8,8 @@ function connectToDB() {
     })
     .catch((error) => {
       console.log("error conecting to Database");
+      process.exit(1);
     });
 }
+
+module.exports = connectToDB;
