@@ -1,5 +1,6 @@
 const userModel = require("../models/user.model");
 const jwt = require("jsonwebtoken");
+const emailService = require("../services/email.service");
 
 // user register controller
 // post - /api/auth/register
@@ -35,6 +36,8 @@ async function userRegisterController(req, res) {
     },
     token,
   });
+
+  await emailService.sendRegistrationEmail(user.email, user.name);
 }
 
 // user login controller
@@ -42,7 +45,7 @@ async function userRegisterController(req, res) {
 async function userLoginController(req, res) {
   const { email, password } = req.body;
 
-  const user = await userModel.findOne({ email }).select("+password")
+  const user = await userModel.findOne({ email }).select("+password");
 
   if (!user) {
     return res.status(401).json({
